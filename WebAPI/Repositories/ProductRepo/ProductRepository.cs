@@ -22,10 +22,10 @@ namespace WebAPI.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllAsync()
+        public async Task<IEnumerable<Products>> GetAllAsync()
         {
 
-            return (IEnumerable<ProductDto>) await _context.Products.Include(p => p.Category).ToListAsync();
+            return await _context.Products.Include(p => p.Category).ToListAsync();
         }
 
         public async Task<ProductDto> GetByIdAsync(int id)

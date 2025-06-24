@@ -5911,11 +5911,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ProjectDotNetCore\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Dell\\Source\\Repos\\WebDotNetCoreAPI\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
-      "projectPath": "D:\\ProjectDotNetCore\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "projectPath": "C:\\Users\\Dell\\Source\\Repos\\WebDotNetCoreAPI\\WebAPI\\WebAPI.csproj",
       "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-      "outputPath": "D:\\ProjectDotNetCore\\WebAPI\\WebAPI\\obj\\",
+      "outputPath": "C:\\Users\\Dell\\Source\\Repos\\WebDotNetCoreAPI\\WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -9,7 +9,7 @@ namespace WebAPI.Repositories
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<ProductDto>> GetAllAsync();
+        Task<IEnumerable<Products>> GetAllAsync();
     }
     public interface IProductGetIdRepository
     {

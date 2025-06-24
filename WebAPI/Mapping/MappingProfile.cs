@@ -12,7 +12,8 @@ namespace WebAPI.Data
     {
         public MappingProfile()
         {
-            CreateMap<Products, ProductDto>();
+            CreateMap<Products, ProductDto>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); ;
             CreateMap<Products, UpdateProductDto > ();
             // Thêm các ánh xạ khác nếu cần
         }

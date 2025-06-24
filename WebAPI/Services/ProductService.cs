@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,14 +11,16 @@ namespace WebAPI.Services
 {
     public class ProductService
     {
+        private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
         private readonly IProductAddRepository _productAddRepository;
         private readonly IProductGetIdRepository _productGetIdRepository;
         private readonly IProductUpdateRepository _productUpdateRepository;
         private readonly IProductDeleteRepository _productDeleteRepository;
 
-        public ProductService(IProductRepository productRepository, IProductAddRepository productAddRepository, IProductGetIdRepository productGetIdRepository, IProductUpdateRepository productUpdateRepository, IProductDeleteRepository productDeleteRepository)
+        public ProductService(IProductRepository productRepository, IProductAddRepository productAddRepository, IProductGetIdRepository productGetIdRepository, IProductUpdateRepository productUpdateRepository, IProductDeleteRepository productDeleteRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _productRepository = productRepository;
             _productAddRepository = productAddRepository;
             _productGetIdRepository = productGetIdRepository;
@@ -27,7 +30,8 @@ namespace WebAPI.Services
 
         public async Task<IEnumerable<ProductDto>> GetAllProducts()
         {
-            return await _productRepository.GetAllAsync();
+            var products = await _productRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
         public async Task<ProductDto> GetProductById(int id)

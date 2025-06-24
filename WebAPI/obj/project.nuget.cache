@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OkGrGWKJ5EZn7lkhZsb1ZRlMPcSvBeRUB7dbt1X0mk8YpVM6lCENd52SK4QYRXXy4dAReAtYZCtKKfJjCm8PZQ==",
+  "dgSpecHash": "bhWzZN0NGXPeEj0p+HweWObUqGOr7R9NCT7eGlRzN9MKvIspChBRv7awat9vqAaUxzd2zzFSJOprF+aQRCXZIg==",
   "success": true,
-  "projectFilePath": "D:\\ProjectDotNetCore\\WebAPI\\WebAPI\\WebAPI.csproj",
+  "projectFilePath": "C:\\Users\\Dell\\Source\\Repos\\WebDotNetCoreAPI\\WebAPI\\WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

@@ -40,15 +40,7 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
                 // Gọi phương thức từ service và trả về kết quả với mã HTTP 200 (OK)
                 var products = await _productService.GetAllProducts();
                 if (products == null) return NotFound();
-                var result = products.Select(p => new ProductDto
-                {
-                    Name = p.Name,
-                    Price = p.Price,
-                    CreatedDate = p.CreatedDate,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p != null ? p.Name : "Chưa có danh mục"
-                });
-                return Ok(result);
+                return Ok(products);
             }
             catch (Exception ex)
             {
