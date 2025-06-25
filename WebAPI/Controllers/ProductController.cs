@@ -2,8 +2,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc; // Dùng cho việc tạo Controller trong ASP.NET Core
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.DTO.ProductDTO;
 
@@ -22,39 +20,43 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
     {
         // Biến chỉ đọc để dùng các hàm xử lý nghiệp vụ từ lớp ProductService
         private readonly ProductService _productService;
-        private readonly IMapper _mapper;
 
         // Constructor để truyền dependency ProductService vào (Dependency Injection)
-        public ProductController(ProductService productService, IMapper mapper)
+        public ProductController(ProductService productService)
         {
             _productService = productService; // Gán đối tượng được inject vào biến dùng nội bộ
-            _mapper = mapper;
         }
 
-        // API GET: Lấy danh sách tất cả sản phẩm
+        // API GET: Get all products record
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
             try
             {
-                // Gọi phương thức từ service và trả về kết quả với mã HTTP 200 (OK)
+                // call method from service and return result with code HTTP 200 (OK)
                 var products = await _productService.GetAllProducts();
                 if (products == null) return NotFound();
                 return Ok(products);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Lỗi khi get products: {ex}");
+                return StatusCode(500, $"Error when get products: {ex}");
             }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
-            var product = await _productService.GetProductById(id);
-            if (product == null) return NotFound();
-            var dto = _mapper.Map<ProductDto>(product);
-            return Ok(dto);
+            try
+            {
+                var product = await _productService.GetProductById(id);
+                if (product == null) return NotFound();
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error when get product: {ex}");
+            }
         }
 
         // API POST: Thêm một sản phẩm mới
@@ -84,50 +86,37 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
 
             await _productService.AddProductAsync(product);
             // Trả về phản hồi thành công
-            return Ok(new { message = "Thêm sản phẩm thành công", data = product });
+            return Ok(new { message = "Add product thành công", data = product });
         }
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto dto)
         {
-            // Check existing Product
-            var existingProduct = await _productService.GetProductById(id);
-            if (existingProduct == null)
-                return NotFound("Không tìm thấy sản phẩm");
             try
             {
-                var product = new Products
-                {
-                    Id = id,
-                    Name = dto.Name,
-                    Price = dto.Price,
-                    CreatedDate = existingProduct.CreatedDate,
-                    CategoryId = dto.CategoryId
-                };
-                // Update
-                await _productService.UpdateProductAsync(product);
+                await _productService.UpdateProductAsync(id, dto);
                 return Ok(new
                 {
-                    message = "Cập nhật sản phẩm thành công",
-                    data = product
-                });
+                    message = "Updated product thành công",
+                    data = await _productService.GetProductById(id)
+            });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Lỗi khi cập nhật: {ex}");
+                return StatusCode(500, $"Erorr when update: {ex}");
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            // Kiểm tra sản phẩm tồn tại
-            var existingProduct = await _productService.GetProductByIdAsync(id);
-            if (existingProduct == null)
-                return NotFound("Không tìm thấy sản phẩm");
             try
             {
+                // Kiểm tra sản phẩm tồn tại
+                var existingProduct = await _productService.GetProductByIdForDeleteAsync(id);
+                if (existingProduct == null)
+                    return NotFound("Không tìm thấy sản phẩm");
                 await _productService.DeleteProductAsync(id);
                 return Ok(new
                 {

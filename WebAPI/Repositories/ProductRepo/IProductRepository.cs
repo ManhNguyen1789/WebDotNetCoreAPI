@@ -13,10 +13,10 @@ namespace WebAPI.Repositories
     }
     public interface IProductGetIdRepository
     {
-        Task<ProductDto> GetByIdAsync(int id);
+        Task<Products> GetByIdAsync(int id);
 
         // Get ProductByID for Delete
-        Task<DeleteProductDto> GetProductByIdAsync(int id);
+        Task<DeleteProductDto> GetProductByIdForDeleteAsync(int id);
     }
 
     public interface IProductAddRepository

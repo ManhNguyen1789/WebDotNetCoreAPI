@@ -28,7 +28,7 @@ namespace WebAPI.DTO.ProductDTO
         public DateTime CreatedDate { get; set; }
 
         public int? CategoryId { get; set; }         // Liên kết đến danh mục
-        public string? CategoryName { get; set; }    // Tên danh mục (từ navigation)
+        public string CategoryName { get; set; }    // Tên danh mục (từ navigation)
     }
 
     // DTO khi tạo mới (PUT)
@@ -39,7 +39,6 @@ namespace WebAPI.DTO.ProductDTO
         public string Name { get; set; }
         [Range(0, 1000000)]
         public decimal Price { get; set; }
-        public int CategoryId { get; set; }
     }
 
     // DTO khi tạo mới (DELETE)

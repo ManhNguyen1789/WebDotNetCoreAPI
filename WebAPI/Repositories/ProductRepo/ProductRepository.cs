@@ -28,9 +28,10 @@ namespace WebAPI.Repositories
             return await _context.Products.Include(p => p.Category).ToListAsync();
         }
 
-        public async Task<ProductDto> GetByIdAsync(int id)
+        public async Task<Products> GetByIdAsync(int id)
         {
-            return await _context.Products
+            // use mapping DTO
+            /*return await _context.Products
                 .Where(p => p.Id == id)
                 .Select(p => new ProductDto
                 {
@@ -40,10 +41,13 @@ namespace WebAPI.Repositories
                     CategoryId = p.CategoryId,
                     CategoryName = p.Category.Name
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();*/
+
+            // use automapping
+            return await _context.Products.Where(p => p.Id == id).Include(p => p.Category).FirstOrDefaultAsync();
         }
 
-        public async Task<DeleteProductDto> GetProductByIdAsync(int id)
+        public async Task<DeleteProductDto> GetProductByIdForDeleteAsync(int id)
         {
             return await _context.Products
                 .Where(p => p.Id == id)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,13 @@ namespace WebAPI.Services
 
         public async Task<ProductDto> GetProductById(int id)
         {
-            return await _productGetIdRepository.GetByIdAsync(id);
+            var product = await _productGetIdRepository.GetByIdAsync(id);
+            return _mapper.Map<ProductDto>(product);
         }
 
-        public async Task<DeleteProductDto> GetProductByIdAsync(int id)
+        public async Task<DeleteProductDto> GetProductByIdForDeleteAsync(int id)
         {
-            return await _productGetIdRepository.GetProductByIdAsync(id);
+            return await _productGetIdRepository.GetProductByIdForDeleteAsync(id);
         }
 
         public Task AddProductAsync(Products product) 
@@ -49,9 +51,22 @@ namespace WebAPI.Services
             return _productAddRepository.AddAsync(product); 
         }
 
-        public Task UpdateProductAsync(Products product)
+        public async Task<Task> UpdateProductAsync(int id, [FromBody] UpdateProductDto dto)
         {
-            return _productUpdateRepository.UpdateAsync(product);
+            // Check existing Product
+            var existingProduct = await GetProductById(id);
+            /*if (existingProduct == null)
+                return NotFound("Không tìm thấy sản phẩm");*/
+            // Update with mapping DTO
+            var pt = new Products
+            {
+                Id = id,
+                Name = dto.Name,
+                Price = dto.Price,
+                CreatedDate = existingProduct.CreatedDate,
+                CategoryId = (int)existingProduct.CategoryId
+            };
+            return _productUpdateRepository.UpdateAsync(pt);
         }
 
         public Task DeleteProductAsync(int id)
