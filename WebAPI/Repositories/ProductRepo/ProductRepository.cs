@@ -13,6 +13,7 @@ namespace WebAPI.Repositories
     IProductAddRepository,
     IProductGetIdRepository,
     IProductUpdateRepository,
+    IProductPatchRepository,
     IProductDeleteRepository
     {
         private readonly MyDbContext _context;
@@ -30,6 +31,8 @@ namespace WebAPI.Repositories
 
         public async Task<Products> GetByIdAsync(int id)
         {
+            // use automapping
+            return await _context.Products.Where(p => p.Id == id).Include(p => p.Category).FirstOrDefaultAsync();
             // use mapping DTO
             /*return await _context.Products
                 .Where(p => p.Id == id)
@@ -42,9 +45,6 @@ namespace WebAPI.Repositories
                     CategoryName = p.Category.Name
                 })
                 .FirstOrDefaultAsync();*/
-
-            // use automapping
-            return await _context.Products.Where(p => p.Id == id).Include(p => p.Category).FirstOrDefaultAsync();
         }
 
         public async Task<DeleteProductDto> GetProductByIdForDeleteAsync(int id)
@@ -63,7 +63,7 @@ namespace WebAPI.Repositories
             _context.Products.Add(product);
         }*/
 
-        // Thêm sản phẩm mới vào database
+        //Add new product to database
         //async khai báo hàm bất đồng bộ, giúp không bị block khi quá tải
         public async Task AddAsync(Products product)
         {
@@ -71,14 +71,21 @@ namespace WebAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // Cập nhật thông tin sản phẩm
+        // Update product
         public async Task UpdateAsync(Products product)
         {
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
         }
 
-        // Xóa sản phẩm theo ID
+        // Update product patch
+        public async Task PatchAsync(Products product)
+        {
+            _context.Products.Update(product); // Entity đang được tracking thì chỉ cần Save
+            await _context.SaveChangesAsync();
+        }
+
+        // Delete product by ID
         public async Task DeleteAsync(int id)
         {
             var product = await _context.Products.FindAsync(id);

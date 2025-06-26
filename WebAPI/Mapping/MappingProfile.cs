@@ -12,10 +12,15 @@ namespace WebAPI.Data
     {
         public MappingProfile()
         {
+            // Automapper Products to ProductDto
             CreateMap<Products, ProductDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); ;
-            CreateMap<Products, UpdateProductDto > ();
-            // Thêm các ánh xạ khác nếu cần
+
+            // Automapper Products to UpdateProductDto
+            CreateMap<Products, UpdateProductDto>();
+
+            // Automapper UpdateProductDto to Products
+            CreateMap<UpdateProductDto, Products>();
         }
     }
 }

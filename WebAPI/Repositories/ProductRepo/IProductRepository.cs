@@ -29,6 +29,11 @@ namespace WebAPI.Repositories
         Task UpdateAsync(Products product);            
     }
 
+    public interface IProductPatchRepository
+    {
+        Task PatchAsync(Products product);
+    }
+
     public interface IProductDeleteRepository
     {
         Task DeleteAsync(int id);                      

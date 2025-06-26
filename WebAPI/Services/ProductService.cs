@@ -17,15 +17,17 @@ namespace WebAPI.Services
         private readonly IProductAddRepository _productAddRepository;
         private readonly IProductGetIdRepository _productGetIdRepository;
         private readonly IProductUpdateRepository _productUpdateRepository;
+        private readonly IProductPatchRepository _productUpdatePatchRepository;
         private readonly IProductDeleteRepository _productDeleteRepository;
 
-        public ProductService(IProductRepository productRepository, IProductAddRepository productAddRepository, IProductGetIdRepository productGetIdRepository, IProductUpdateRepository productUpdateRepository, IProductDeleteRepository productDeleteRepository, IMapper mapper)
+        public ProductService(IProductRepository productRepository, IProductAddRepository productAddRepository, IProductGetIdRepository productGetIdRepository, IProductUpdateRepository productUpdateRepository, IProductPatchRepository productPatchRepository, IProductDeleteRepository productDeleteRepository, IMapper mapper)
         {
             _mapper = mapper;
             _productRepository = productRepository;
             _productAddRepository = productAddRepository;
             _productGetIdRepository = productGetIdRepository;
             _productUpdateRepository = productUpdateRepository;
+            _productUpdatePatchRepository = productPatchRepository;
             _productDeleteRepository = productDeleteRepository;
         }
 
@@ -51,22 +53,29 @@ namespace WebAPI.Services
             return _productAddRepository.AddAsync(product); 
         }
 
-        public async Task<Task> UpdateProductAsync(int id, [FromBody] UpdateProductDto dto)
+        public async Task<bool> UpdateProductAsync(int id, [FromBody] UpdateProductDto dto)
         {
             // Check existing Product
-            var existingProduct = await GetProductById(id);
-            /*if (existingProduct == null)
-                return NotFound("Không tìm thấy sản phẩm");*/
-            // Update with mapping DTO
-            var pt = new Products
-            {
-                Id = id,
-                Name = dto.Name,
-                Price = dto.Price,
-                CreatedDate = existingProduct.CreatedDate,
-                CategoryId = (int)existingProduct.CategoryId
-            };
-            return _productUpdateRepository.UpdateAsync(pt);
+            var existingProduct = await _productGetIdRepository.GetByIdAsync(id);
+            if (existingProduct == null) return false;
+            existingProduct.Name = dto.Name;
+            existingProduct.Price = dto.Price;
+            existingProduct.CategoryId = dto.CategoryId;
+            
+            await _productUpdateRepository.UpdateAsync(existingProduct);
+            return true;
+        }
+
+        public async Task<bool> PatchProductAsync(int id, UpdatePatchDto dto)
+        {
+            var existing = await _productGetIdRepository.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            if (!string.IsNullOrEmpty(dto.Name)) existing.Name = dto.Name;
+            existing.Price = dto.Price;
+
+            await _productUpdatePatchRepository.PatchAsync(existing);
+            return true;
         }
 
         public Task DeleteProductAsync(int id)

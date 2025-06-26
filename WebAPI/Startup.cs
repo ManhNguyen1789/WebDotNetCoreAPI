@@ -31,11 +31,12 @@ namespace WebAPI
         {
             services.AddControllers(); // Đăng ký dịch vụ MVC Controller để hỗ trợ Web API
 
-            // Đăng ký IProductRepository với ProductRepository theo vòng đời "scoped"
+            // đăng IProductRepository and ProductRepository with lifecycle "scoped"
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductAddRepository, ProductRepository>();
             services.AddScoped<IProductGetIdRepository, ProductRepository>();
             services.AddScoped<IProductUpdateRepository, ProductRepository>();
+            services.AddScoped<IProductPatchRepository, ProductRepository>();
             services.AddScoped<IProductDeleteRepository, ProductRepository>();
 
             // Đăng ký lớp ProductService, sẽ được inject tự động ở các Controller

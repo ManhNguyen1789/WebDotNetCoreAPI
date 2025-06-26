@@ -1,22 +1,21 @@
-﻿// Import các thư viện cần thiết
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc; // Dùng cho việc tạo Controller trong ASP.NET Core
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc; // use for create Controller in ASP.NET Core
 using System;
 using System.Threading.Tasks;
 using WebAPI.DTO.ProductDTO;
 
-// Import namespace của các lớp do bạn định nghĩa
-using WebAPI.Models;   // Chứa model Product
-using WebAPI.Services; // Chứa lớp xử lý nghiệp vụ ProductService
+// Import namespace 
+using WebAPI.Models;   // include model Product
+using WebAPI.Services; // include class process business ProductService
 
-namespace WebAPI.Controllers // Không gian tên cho Controller
+namespace WebAPI.Controllers 
 {
-    // Thiết lập route cơ bản: API sẽ truy cập qua đường dẫn /api/product
+    // setup route: API will access via path /api/product
     [Route("api/[controller]")]
 
-    // Xác định đây là một API Controller, hỗ trợ tự động validate model và trả lỗi chuẩn REST
+    // Xác định đây là một API Controller, support auto validate model and return error standard REST
     [ApiController]
-    public class ProductController : ControllerBase // Controller không dùng View, chuyên xử lý API
+    public class ProductController : ControllerBase // Controller don't use View, chuyên processing API
     {
         // Biến chỉ đọc để dùng các hàm xử lý nghiệp vụ từ lớp ProductService
         private readonly ProductService _productService;
@@ -70,7 +69,7 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
              await _productService.AddProductAsync(product);
 
              // Trả về phản hồi thành công
-             return Ok(new { message = "Thêm sản phẩm thành công", data = product });
+             return Ok(new { message = "add product succsess", data = product });
          }*/
 
         [HttpPost]
@@ -86,7 +85,7 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
 
             await _productService.AddProductAsync(product);
             // Trả về phản hồi thành công
-            return Ok(new { message = "Add product thành công", data = product });
+            return Ok(new { message = "Add product succsess", data = product});
         }
 
 
@@ -95,16 +94,48 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
         {
             try
             {
-                await _productService.UpdateProductAsync(id, dto);
-                return Ok(new
+                bool status = await _productService.UpdateProductAsync(id, dto);
+                if(status == true)
                 {
-                    message = "Updated product thành công",
-                    data = await _productService.GetProductById(id)
-            });
+                    return Ok(new
+                    {
+                        message = "Updated product succsess",
+                        data = await _productService.GetProductById(id)
+                    });
+                }
+                else
+                {
+                    return NotFound(new
+                    {
+                        message = "Not found product!"
+                    });
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Erorr when update: {ex}");
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchProduct(int id, [FromBody] UpdatePatchDto dto)
+        {
+            try
+            {
+                var result = await _productService.PatchProductAsync(id, dto);
+                if (!result)
+                    return NotFound("Not found product");
+
+                return Ok(new 
+                { 
+                    message = "Update successed", 
+                    data = await _productService.GetProductById(id)
+                });
+                        
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error server: {ex.Message}");
             }
         }
 
@@ -116,16 +147,16 @@ namespace WebAPI.Controllers // Không gian tên cho Controller
                 // Kiểm tra sản phẩm tồn tại
                 var existingProduct = await _productService.GetProductByIdForDeleteAsync(id);
                 if (existingProduct == null)
-                    return NotFound("Không tìm thấy sản phẩm");
+                    return NotFound("Not found the product");
                 await _productService.DeleteProductAsync(id);
                 return Ok(new
                 {
-                    message = "Delete sản phẩm thành công"
+                    message = "Delete product succsess"
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Lỗi khi delete: {ex.Message}");
+                return StatusCode(500, $"Error when delete: {ex.Message}");
             }
             
         }
