@@ -75,6 +75,11 @@ namespace WebAPI
             // Thiết lập middleware định tuyến
             app.UseRouting();
 
+            // middleware xử lý lỗi
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseAuthentication();
+
             // Kích hoạt middleware kiểm tra ủy quyền (Authorization)
             app.UseAuthorization();
 

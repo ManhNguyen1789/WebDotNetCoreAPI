@@ -160,5 +160,12 @@ namespace WebAPI.Controllers
             }
             
         }
+
+
+        // note create and add project test Unit with xunit test by terminal
+        /*dotnet new xunit -n WebAPI.Tests : create project test use framework xUnit
+        dotnet sln add WebAPI.Tests/WebAPI.Tests.csproj : add project test to solution .sln
+        dotnet add WebAPI.Tests reference WebAPI/WebAPI.csproj: Để test gọi được sang project WebAPI, bạn cần thêm tham chiếu,
+        */
     }
 }

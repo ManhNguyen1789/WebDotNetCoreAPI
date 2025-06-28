@@ -9,7 +9,7 @@ namespace WebAPI.DTO.ProductDTO
     // DTO when create new (POST)
     public class CreateProductDto
     {
-        [Required]
+        /*[Required]*/
         [StringLength(100)]
         public string Name { get; set; }
         [Range(0, 1000000)]
@@ -20,7 +20,7 @@ namespace WebAPI.DTO.ProductDTO
     // DTO return data (GET)
     public class ProductDto
     {
-        [Required]
+        /*[Required]*/
         [StringLength(100)]
         public string Name { get; set; }
         [Range(0, 1000000)]
@@ -34,7 +34,7 @@ namespace WebAPI.DTO.ProductDTO
     // DTO when update (PUT)
     public class UpdateProductDto
     {
-        [Required]
+        /*[Required]*/
         [StringLength(100)]
         public string Name { get; set; }
         [Range(0, 1000000)]
@@ -46,7 +46,7 @@ namespace WebAPI.DTO.ProductDTO
     // DTO when update patch (PATCH)
     public class UpdatePatchDto
     {
-        [Required]
+        /*[Required]*/
         [StringLength(100)]
         public string Name { get; set; }
         [Range(0, 1000000)]
